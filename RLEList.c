@@ -1,3 +1,7 @@
+//
+// Created by eden on 24/04/2022.
+//
+
 #include "RLEList.h"
 #include <stdlib.h>
 
@@ -182,16 +186,13 @@ char* RLEListExportToString(RLEList list, RLEListResult* result)
     return out;
 }
 
-RLEListResult RLEListMap(RLEList list, MapFunction map_function)
-{
-    if (list == NULL)
-    {
+RLEListResult RLEListMap(RLEList list, MapFunction map_function) {
+    if (list == NULL) {
         return RLE_LIST_NULL_ARGUMENT;
     }
 
     RLEList temp = list;
-    while (temp)
-    {
+    while (temp) {
         temp->letter = map_function(temp->letter);
         temp = temp->next;
     }
