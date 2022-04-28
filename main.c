@@ -1,7 +1,8 @@
-#define encoded 'e'
-#define inverted 'i'
+#define encoded "-e"
+#define inverted "-i"
 #include "AsciiArtTool.h"
 #include "RLEList.h"
+#include <string.h>
 char change(char value);
 
 
@@ -18,38 +19,30 @@ int main(int argc,char**argv)
     {
         return 0;
     }
+    RLEList list = asciiArtRead(source);
+    fclose(source);
+    if (list == NULL)
+    {
+        return 0;
+    }
     FILE * target = fopen(argv[3],"w");
     if(!target)
     {
-        fclose(source);
         return 0;
     }
-    if(flags[0] != '-' || (flags[1]!= encoded||flags[1]!=inverted) )
+    if(strcmp(flags,encoded) == 0)
     {
-        fclose(source);
-        fclose(target);
-        return 0;
-    }
-    if(flags[1]== encoded)
-    {
-        RLEList list = asciiArtRead(source);
         asciiArtPrintEncoded(list,target);
-        fclose(source);
-        fclose(target);
-        RLEListDestroy(list);
-        return 0;
     }
 
-    if(flags[1]== inverted)
+    else if(strcmp(flags,inverted) == 0)
     {
-        RLEList list = asciiArtRead(source);
-        RLEListMap(list,change);
+        RLEListMap(list,&change);
         asciiArtPrint( list, target);
-        fclose(source);
-        fclose(target);
-        RLEListDestroy(list);
-        return 0;
     }
+    fclose(target);
+    RLEListDestroy(list);
+    return 0;
 
 }
 
